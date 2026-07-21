@@ -1,26 +1,27 @@
 apiversion: v1
 kind: Configmap
 metadata:
-  name: catalogue
+  name: cart
   namespace: roboshop
   labels:
     project: roboshop
     tier: backend
-    component: catalogue
+    component: cart
 data:
-  MONGO: "true"
-  MONGO_URL: "mongodb://mongodb:27017//catalogue"    
+  REDIS_HOST: "redis"
+  CATALOGUE_HOST: "catalogue"
+  CATALOGUE_PORT: "8080"
 ---  
 apiVersion: apps/v1 
 kind: deployment
 metadata:
-  name: catalogue
+  name: cart
   namespace: roboshop
   # these labels are replicaset labels
   labels:
     project: roboshop
     tier: backend
-    component: catalogue
+    component: cart
 spec:
   replicas: 1
   selector:
@@ -28,18 +29,18 @@ spec:
     matchLabels:
       project: roboshop
       tier: backend
-      component: catalogue
+      component: cart
   # This is pod definition, pod is subset of replicaset
   template:
     metadata:
       labels:
         project: roboshop
         tier: backend
-        component: catalogue
+        component: cart
     spec:
       containers:
       - name: nginx
-        image: naveen678/catalogue:1.0.0
+        image: naveen678/cart:1.0.0
         imagepullpolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
           requests:
@@ -66,22 +67,22 @@ spec:
                                                                
         envfrom:
          - configmapRef:
-             name: catalogue
+             name: cart
 ---
 apiversion: v1                                            #clusterip
 kind: service
 metadata: 
-  name: catalogue
+  name: cart
   namespace: roboshop
   labels:
     project: roboshop
     tier: backend
-    component: catalogue
+    component: cart
 spec:
   selector:
     project: roboshop                                      #labels are used as selectors
     tier: backend
-    component: catalogue 
+    component: cart 
   ports: 
   - protocol: TCP
     port: 8080 # service port

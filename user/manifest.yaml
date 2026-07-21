@@ -1,26 +1,27 @@
 apiversion: v1
 kind: Configmap
 metadata:
-  name: catalogue
+  name: user
   namespace: roboshop
   labels:
     project: roboshop
     tier: backend
-    component: catalogue
+    component: user
 data:
+  REDIS_URL: "redis"
+  MONGO_URL: "mongodb://mongodb:27017/users"
   MONGO: "true"
-  MONGO_URL: "mongodb://mongodb:27017//catalogue"    
 ---  
 apiVersion: apps/v1 
 kind: deployment
 metadata:
-  name: catalogue
+  name: user
   namespace: roboshop
   # these labels are replicaset labels
   labels:
     project: roboshop
     tier: backend
-    component: catalogue
+    component: user
 spec:
   replicas: 1
   selector:
@@ -28,18 +29,18 @@ spec:
     matchLabels:
       project: roboshop
       tier: backend
-      component: catalogue
+      component: user
   # This is pod definition, pod is subset of replicaset
   template:
     metadata:
       labels:
         project: roboshop
         tier: backend
-        component: catalogue
+        component: user
     spec:
       containers:
       - name: nginx
-        image: naveen678/catalogue:1.0.0
+        image: naveen678/cart:1.0.0
         imagepullpolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
           requests:
@@ -66,23 +67,23 @@ spec:
                                                                
         envfrom:
          - configmapRef:
-             name: catalogue
+             name: user
 ---
 apiversion: v1                                            #clusterip
 kind: service
 metadata: 
-  name: catalogue
+  name: user
   namespace: roboshop
   labels:
     project: roboshop
     tier: backend
-    component: catalogue
+    component: user
 spec:
   selector:
     project: roboshop                                      #labels are used as selectors
     tier: backend
-    component: catalogue 
+    component: user 
   ports: 
   - protocol: TCP
     port: 8080 # service port
-    targetport: 8080 # container port        
+    targetport: 8080 # container port         
