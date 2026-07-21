@@ -11,7 +11,7 @@ data:
   MONGO: "true"
   MONGO_URL: "mongodb://mongodb:27017//catalogue"    
 ---  
-apiVersion: apps/v1
+apiVersion: apps/v1 
 kind: deployment
 metadata:
   name: catalogue
@@ -40,11 +40,35 @@ spec:
       containers:
       - name: nginx
         image: naveen678/catalogue:1.0.0
+
+        resources:
+          requests:
+          memory: "128Mi"
+          cpu: "100m"
+        limits:
+          memory: "128Mi"
+          cpu: "100m"
+
+        redinessprobe:
+          #httpGet:
+            ##port: 8080
+          tcp socket:
+            port: 8080  
+          failureThershold: 2                            #after how many hits it should be failure
+          periodseconds: 10                              #every 10sec healhth check should run
+          initialDelaySeconds: 5
+        livenessprobe:
+          httpGet:
+             path: /health
+             port: 8088
+          failureThershold: 2                            #after how many hits it should be failure
+          periodseconds: 10                              #every 10sec healhth check should run 
+                                                               
         envfrom:
          - configmapRef:
              name: catalogue
 ---
-apiversion: v1                                              #clusterip
+apiversion: v1                                            #clusterip
 kind: service
 metadata: 
   name: catalogue
@@ -55,10 +79,10 @@ metadata:
     component: catalogue
 spec:
   selector:
-    project: roboshop                                       #labels are used as selectors
+    project: roboshop                                      #labels are used as selectors
     tier: backend
     component: catalogue 
-  ports:
+  ports: 
   - protocol: TCP
     port: 8080 # service port
     targetport: 8080 # container port        
