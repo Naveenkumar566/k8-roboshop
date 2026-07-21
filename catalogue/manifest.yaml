@@ -1,0 +1,64 @@
+apiversion: v1
+kind: Configmap
+metadata:
+  name: catalogue
+  namespace: roboshop
+  labels:
+    project: roboshop
+    tier: backend
+    component: catalogue
+data:
+  MONGO: "true"
+  MONGO_URL: "mongodb://mongodb:27017//catalogue"    
+---  
+apiVersion: apps/v1
+kind: deployment
+metadata:
+  name: catalogue
+  namespace: roboshop
+  # these labels are replicaset labels
+  labels:
+    project: roboshop
+    tier: backend
+    component: catalogue
+spec:
+  replicas: 1
+  selector:
+    # using these labels replica set selects the pod
+    matchLabels:
+      project: roboshop
+      tier: backend
+      component: catalogue
+  # This is pod definition, pod is subset of replicaset
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        tier: backend
+        component: catalogue
+    spec:
+      containers:
+      - name: nginx
+        image: naveen678/catalogue:1.0.0
+        envfrom:
+         - configmapRef:
+             name: catalogue
+---
+apiversion: v1                                              #clusterip
+kind: service
+metadata: 
+  name: catalogue
+  namespace: roboshop
+  labels:
+    project: roboshop
+    tier: backend
+    component: catalogue
+spec:
+  selector:
+    project: roboshop                                       #labels are used as selectors
+    tier: backend
+    component: catalogue 
+  ports:
+  - protocol: TCP
+    port: 8080 # service port
+    targetport: 8080 # container port        
