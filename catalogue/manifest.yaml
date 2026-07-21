@@ -56,7 +56,7 @@ spec:
             port: 8080  
           failureThershold: 2                            #after how many hits it should be failure
           periodseconds: 10                              #every 10sec healhth check should run
-          initialDelaySeconds: 5
+          initialDelaySeconds: 15                        #health can be ignored for first 15sec while creating
         livenessprobe:
           httpGet:
              path: /health
