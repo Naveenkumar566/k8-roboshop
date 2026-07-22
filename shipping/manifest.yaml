@@ -1,27 +1,26 @@
 apiversion: v1
 kind: Configmap
 metadata:
-  name: user
+  name: shipping
   namespace: roboshop
   labels:
     project: roboshop
     tier: backend
-    component: user
+    component: shipping
 data:
-  REDIS_URL: "redis://redis:6379"
-  MONGO_URL: "mongodb://mongodb:27017/users"
-  MONGO: "true"
+  CART_ENDPOINT: "cart:8080"
+  DB_HOST: "mysql"    
 ---  
 apiVersion: apps/v1 
 kind: deployment
 metadata:
-  name: user
+  name: shipping
   namespace: roboshop
   # these labels are replicaset labels
   labels:
     project: roboshop
     tier: backend
-    component: user
+    component: shipping
 spec:
   replicas: 1
   selector:
@@ -29,18 +28,18 @@ spec:
     matchLabels:
       project: roboshop
       tier: backend
-      component: user
+      component: shipping
   # This is pod definition, pod is subset of replicaset
   template:
     metadata:
       labels:
         project: roboshop
         tier: backend
-        component: user
+        component: shipping
     spec:
       containers:
       - name: nginx
-        image: naveen678/cart:1.0.0
+        image: naveen678/shipping:1.0.0
         imagepullpolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
           requests:
@@ -53,11 +52,17 @@ spec:
         redinessprobe:
           #httpGet:
             ##port: 8080
-          tcp socket:
+          tcpsocket:
             port: 8080  
           failureThershold: 2                            #after how many hits it should be failure
           periodseconds: 10                              #every 10sec healhth check should run
-          initialDelaySeconds: 15                        #health can be ignored for first 15sec while creating
+          initialDelaySeconds: 15
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          failureThreshold: 20
+          periodSeconds: 10                         #health can be ignored for first 15sec while creating
         livenessprobe:
           httpGet:
              path: /health
@@ -67,23 +72,23 @@ spec:
                                                                
         envfrom:
          - configmapRef:
-             name: user
+             name: shipping
 ---
 apiversion: v1                                            #clusterip
 kind: service
 metadata: 
-  name: user
+  name: shipping
   namespace: roboshop
   labels:
     project: roboshop
     tier: backend
-    component: user
+    component: shipping
 spec:
   selector:
     project: roboshop                                      #labels are used as selectors
     tier: backend
-    component: user 
+    component: shipping 
   ports: 
   - protocol: TCP
     port: 8080 # service port
-    targetport: 8080 # container port         
+    targetport: 8080 # container port        
