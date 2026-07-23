@@ -28,7 +28,7 @@ spec:
       - name: nginx
         image: naveen678/mongodb:1.0.0
 ---
-apiversion: v1                                              #clusterip
+apiVersion: v1                                              #clusterip
 kind: service
 metadata: 
   name: mongodb
@@ -39,7 +39,7 @@ metadata:
     component: mongodb
 spec:
   selector:
-    project: roboshop        #labels are used as selectors
+    project: roboshop                                     #labels are used as selectors
     tier: db
     component: mongodb 
   ports:
