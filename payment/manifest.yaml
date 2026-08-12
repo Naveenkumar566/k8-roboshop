@@ -1,27 +1,31 @@
 apiversion: v1
 kind: Configmap
 metadata:
-  name: user
+  name: payment
   namespace: roboshop
   labels:
     project: roboshop
     tier: backend
-    component: user
+    component: payment
 data:
-  REDIS_URL: "redis://redis:6379"
-  MONGO_URL: "mongodb://mongodb:27017/users"
-  MONGO: "true"
----  
+  CART_HOST: "cart"
+  CART_PORT: "mongodb://mongodb:27017//payment"
+  USER_HOST: "user"
+  USER_PORT: "8080"
+  AMQP_HOST: "rabbitmq"
+  AMQP_USER: "roboshop"
+  AMQP_PASS: "roboshop123"
+---   
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: user
+  name: payment
   namespace: roboshop
   # these labels are replicaset labels
   labels:
     project: roboshop
     tier: backend
-    component: user
+    component: payment
 spec:
   replicas: 1
   selector:
@@ -29,18 +33,18 @@ spec:
     matchLabels:
       project: roboshop
       tier: backend
-      component: user
+      component: payment
   # This is pod definition, pod is subset of replicaset
   template:
     metadata:
       labels:
         project: roboshop
         tier: backend
-        component: user
+        component: payment
     spec:
       containers:
       - name: nginx
-        image: naveen678/cart:1.0.0
+        image: naveen678/payment:1.0.0
         imagepullpolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
           requests:
@@ -67,23 +71,23 @@ spec:
                                                                
         envfrom:
          - configmapRef:
-             name: user
+             name: payment
 ---
 apiversion: v1                                            #clusterip
 kind: Service
 metadata: 
-  name: user
+  name: payment
   namespace: roboshop
   labels:
     project: roboshop
     tier: backend
-    component: user
+    component: payment
 spec:
   selector:
     project: roboshop                                      #labels are used as selectors
     tier: backend
-    component: user 
+    component: payment 
   ports: 
   - protocol: TCP
     port: 8080 # service port
-    targetPort: 8080 # container port         
+    targetPort: 8080 # container port        

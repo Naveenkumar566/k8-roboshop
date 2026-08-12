@@ -1,46 +1,45 @@
 apiversion: v1
 kind: Configmap
 metadata:
-  name: user
+  name: frontend
   namespace: roboshop
   labels:
     project: roboshop
-    tier: backend
-    component: user
+    tier: frontend
+    component: frontend
 data:
-  REDIS_URL: "redis://redis:6379"
-  MONGO_URL: "mongodb://mongodb:27017/users"
   MONGO: "true"
+  MONGO_URL: "mongodb://mongodb:27017//frontend"    
 ---  
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: user
+  name: frontend
   namespace: roboshop
   # these labels are replicaset labels
   labels:
     project: roboshop
-    tier: backend
-    component: user
+    tier: frontend
+    component: frontend
 spec:
   replicas: 1
   selector:
     # using these labels replica set selects the pod
     matchLabels:
       project: roboshop
-      tier: backend
-      component: user
+      tier: frontend
+      component: frontend
   # This is pod definition, pod is subset of replicaset
   template:
     metadata:
       labels:
         project: roboshop
-        tier: backend
-        component: user
+        tier: frontend
+        component: frontend
     spec:
       containers:
       - name: nginx
-        image: naveen678/cart:1.0.0
+        image: naveen678/frontend:1.0.0
         imagepullpolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
           requests:
@@ -54,36 +53,33 @@ spec:
           #httpGet:
             ##port: 8080
           tcp socket:
-            port: 8080  
+            port: 80 
           failureThershold: 2                            #after how many hits it should be failure
           periodseconds: 10                              #every 10sec healhth check should run
           initialDelaySeconds: 15                        #health can be ignored for first 15sec while creating
         livenessprobe:
           httpGet:
-             path: /health
-             port: 8088
+             path: /
+             port: 80
           failureThershold: 2                            #after how many hits it should be failure
           periodseconds: 10                              #every 10sec healhth check should run 
-                                                               
-        envfrom:
-         - configmapRef:
-             name: user
 ---
 apiversion: v1                                            #clusterip
 kind: Service
 metadata: 
-  name: user
+  name: frontend
   namespace: roboshop
   labels:
     project: roboshop
-    tier: backend
-    component: user
+    tier: frontend
+    component: frontend
 spec:
+  type: LoadBalancer
   selector:
     project: roboshop                                      #labels are used as selectors
-    tier: backend
-    component: user 
+    tier: frontend
+    component: frontend 
   ports: 
   - protocol: TCP
-    port: 8080 # service port
-    targetPort: 8080 # container port         
+    port: 80 # service port
+    targetPort: 80 # container port        

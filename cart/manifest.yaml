@@ -13,7 +13,7 @@ data:
   CATALOGUE_PORT: "8080"
 ---  
 apiVersion: apps/v1 
-kind: deployment
+kind: Deployment
 metadata:
   name: cart
   namespace: roboshop
@@ -70,7 +70,7 @@ spec:
              name: cart
 ---
 apiversion: v1                                            #clusterip
-kind: service
+kind: Service
 metadata: 
   name: cart
   namespace: roboshop
@@ -86,4 +86,4 @@ spec:
   ports: 
   - protocol: TCP
     port: 8080 # service port
-    targetport: 8080 # container port        
+    targetPort: 8080 # container port        

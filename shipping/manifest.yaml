@@ -12,7 +12,7 @@ data:
   DB_HOST: "mysql"    
 ---  
 apiVersion: apps/v1 
-kind: deployment
+kind: Deployment
 metadata:
   name: shipping
   namespace: roboshop
@@ -75,7 +75,7 @@ spec:
              name: shipping
 ---
 apiversion: v1                                            #clusterip
-kind: service
+kind: Service
 metadata: 
   name: shipping
   namespace: roboshop
@@ -91,4 +91,4 @@ spec:
   ports: 
   - protocol: TCP
     port: 8080 # service port
-    targetport: 8080 # container port        
+    targetPort: 8080 # container port        

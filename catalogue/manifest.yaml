@@ -12,7 +12,7 @@ data:
   MONGO_URL: "mongodb://mongodb:27017//catalogue"    
 ---  
 apiVersion: apps/v1 
-kind: deployment
+kind: Deployment
 metadata:
   name: catalogue
   namespace: roboshop
@@ -69,7 +69,7 @@ spec:
              name: catalogue
 ---
 apiversion: v1                                            #clusterip
-kind: service
+kind: Service
 metadata: 
   name: catalogue
   namespace: roboshop
@@ -85,4 +85,4 @@ spec:
   ports: 
   - protocol: TCP
     port: 8080 # service port
-    targetport: 8080 # container port        
+    targetPort: 8080 # container port        

@@ -1,0 +1,66 @@
+apiversion: v1
+kind: Configmap
+metadata:
+  name: rabbitmq
+  namespace: roboshop
+  labels:
+    project: roboshop
+    tier: backend
+    component: rabbitmq
+data:
+  RABBITMQ_DEFAULT_USER: roboshop
+  RABBITMQ_DEFAULT_PASS: roboshop123
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  namespace: roboshop
+  # these labels are replicaset labels
+  labels:
+    project: roboshop
+    tier: db
+    component: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    # using these labels replica set selects the pod
+    matchLabels:
+      project: roboshop
+      tier: db
+      component: rabbitmq
+  # This is pod definition, pod is subset of replicaset
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        tier: db
+        component: rabbitmq
+    spec:
+      containers:
+      - name: nginx
+        image: rabbitmq:3
+        envfrom:
+        - configmapRef:
+            name: rabbitmq
+---
+
+apiVersion: v1                                              #clusterip
+kind: Service
+metadata: 
+  name: rabbitmq
+  namespace: roboshop
+  labels:
+    project: roboshop
+    tier: db
+    component: rabbitmq
+spec:
+  selector:
+    project: roboshop                                        #labels are used as selectors
+    tier: db
+    component: rabbitmq 
+  ports:
+  - protocol: TCP
+    port: 5672 # service port
+    targetPort: 5672 # container port        
