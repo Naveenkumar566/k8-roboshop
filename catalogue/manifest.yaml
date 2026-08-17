@@ -6,7 +6,7 @@ metadata:
   labels:
     project: roboshop
     tier: backend
-    component: catalogue
+    component: catalogue 
 data:
   MONGO: "true"
   MONGO_URL: "mongodb://mongodb:27017//catalogue"    
@@ -48,7 +48,6 @@ spec:
         limits:
           memory: "128Mi"
           cpu: "100m"
-
         redinessprobe:
           #httpGet:
             ##port: 8080
@@ -85,4 +84,4 @@ spec:
   ports: 
   - protocol: TCP
     port: 8080 # service port
-    targetPort: 8080 # container port        
+    targetPort: 8080 # container port
