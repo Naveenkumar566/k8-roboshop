@@ -38,7 +38,7 @@ spec:
         component: catalogue
     spec:
       containers:
-      - name: nginx
+      - name: catalogue
         image: naveen678/catalogue:1.0.0
         imagePullPolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
@@ -59,7 +59,7 @@ spec:
         livenessProbe:
           httpGet:
              path: /health
-             port: 8088
+             port: 8080
           failureThreshold: 2                            #after how many hits it should be failure
           periodSeconds: 10                              #every 10sec healhth check should run 
                                                                
