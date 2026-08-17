@@ -60,7 +60,7 @@ spec:
         livenessProbe:
           httpGet:
              path: /health
-             port: 8088
+             port: 8080
           failureThreshold: 2                            #after how many hits it should be failure
           periodSeconds: 10                              #every 10sec healhth check should run 
                                                                
