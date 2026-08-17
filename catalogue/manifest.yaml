@@ -49,9 +49,9 @@ spec:
             memory: "128Mi"
             cpu: "100m"
         readinessProbe:
-          #httpGet:
+            #httpGet:
             ##port: 8080
-          tcp Socket:
+          tcpSocket:
             port: 8080  
           failureThreshold: 2                            #after how many hits it should be failure
           periodSeconds: 10                              #every 10sec healhth check should run
