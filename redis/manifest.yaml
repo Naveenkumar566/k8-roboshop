@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: deployment
+kind: Deployment
 metadata:
   name: redis
   namespace: roboshop
@@ -25,7 +25,7 @@ spec:
         component: redis
     spec:
       containers:
-      - name: nginx
+      - name: redis
         image: redis:7.0
 ---
 apiversion: v1                                              #clusterip
@@ -44,5 +44,5 @@ spec:
     component: redis 
   ports:
   - protocol: TCP
-    port: 27017 # service port
-    targetport: 27017 # container port        
+    port: 6379 # service port
+    targetPort: 6379  # container port        
