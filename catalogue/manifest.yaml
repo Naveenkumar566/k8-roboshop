@@ -51,10 +51,10 @@ spec:
         readinessProbe:
           #httpGet:
             ##port: 8080
-          tcp socket:
+          tcp Socket:
             port: 8080  
-          failureThershold: 2                            #after how many hits it should be failure
-          periodseconds: 10                              #every 10sec healhth check should run
+          failureThreshold: 2                            #after how many hits it should be failure
+          periodSeconds: 10                              #every 10sec healhth check should run
           initialDelaySeconds: 15                        #health can be ignored for first 15sec while creating
         livenessProbe:
           httpGet:
