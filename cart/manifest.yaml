@@ -41,7 +41,7 @@ spec:
       containers:
       - name: cart
         image: naveen678/cart:1.0.0
-        imagePullpolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
+        imagePullPolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
           requests:
             memory: "128Mi"
@@ -49,7 +49,7 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "100m"
-        redainessProbe:
+        readinessProbe:
             #httpGet:
             ##port: 8080
           tcpsocket:
@@ -61,7 +61,7 @@ spec:
           httpGet:
              path: /health
              port: 8088
-          failureThershold: 2                            #after how many hits it should be failure
+          failureThreshold: 2                            #after how many hits it should be failure
           periodSeconds: 10                              #every 10sec healhth check should run 
                                                                
         envFrom:
