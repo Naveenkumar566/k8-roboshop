@@ -1,4 +1,4 @@
-apiversion: v1
+apiVersion: v1
 kind: Configmap
 metadata:
   name: shipping
@@ -74,7 +74,7 @@ spec:
          - configmapRef:
              name: shipping
 ---
-apiversion: v1                                            #clusterip
+apiVersion: v1                                            #clusterip
 kind: Service
 metadata: 
   name: shipping
