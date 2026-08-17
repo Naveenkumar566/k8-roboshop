@@ -28,8 +28,8 @@ spec:
       - name: redis
         image: redis:7.0
 ---
-apiversion: v1                                              #clusterip
-kind: service
+apiVersion: v1                                              #clusterip
+kind: Service
 metadata: 
   name: redis
   namespace: roboshop
