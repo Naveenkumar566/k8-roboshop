@@ -1,5 +1,5 @@
-apiversion: v1
-kind: Configmap
+apiVersion: v1
+kind: ConfigMap
 metadata:
   name: cart
   namespace: roboshop
@@ -39,37 +39,36 @@ spec:
         component: cart
     spec:
       containers:
-      - name: nginx
+      - name: cart
         image: naveen678/cart:1.0.0
-        imagepullpolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
+        imagePullpolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
           requests:
-          memory: "128Mi"
-          cpu: "100m"
-        limits:
-          memory: "128Mi"
-          cpu: "100m"
-
-        redinessprobe:
-          #httpGet:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        redainessProbe:
+            #httpGet:
             ##port: 8080
-          tcp socket:
+          tcpsocket:
             port: 8080  
-          failureThershold: 2                            #after how many hits it should be failure
-          periodseconds: 10                              #every 10sec healhth check should run
+          failureThreshold: 2                            #after how many hits it should be failure
+          periodSeconds: 10                              #every 10sec healhth check should run
           initialDelaySeconds: 15                        #health can be ignored for first 15sec while creating
-        livenessprobe:
+        livenessProbe:
           httpGet:
              path: /health
              port: 8088
           failureThershold: 2                            #after how many hits it should be failure
-          periodseconds: 10                              #every 10sec healhth check should run 
+          periodSeconds: 10                              #every 10sec healhth check should run 
                                                                
-        envfrom:
-         - configmapRef:
+        envFrom:
+         - configMapRef:
              name: cart
 ---
-apiversion: v1                                            #clusterip
+apiVersion: v1                                            #clusterip
 kind: Service
 metadata: 
   name: cart
