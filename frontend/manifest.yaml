@@ -128,7 +128,7 @@ spec:
           failureThreshold: 2                            #after how many hits it should be failure
           periodSeconds: 10
         volumeMounts:
-          - name: nginx.config
+          - name: nginx-config
             mountPath: "/etc/nginx/nginx.conf"
             subPath: nginx.conf
             readOnly: true                             #every 10sec healhth check should run 
