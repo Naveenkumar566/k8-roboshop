@@ -99,7 +99,7 @@ spec:
         component: frontend
     spec:
       volumes:
-       - name: nginx.config
+       - name: nginx-config
          configMap:
           name: frontend
       containers:
