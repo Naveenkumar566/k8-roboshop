@@ -58,7 +58,7 @@ spec:
           initialDelaySeconds: 15
         startupProbe:
           httpGet:
-            path: /healthz
+            path: /health
             port: 8080
           failureThreshold: 20
           periodSeconds: 10                         #health can be ignored for first 15sec while creating
