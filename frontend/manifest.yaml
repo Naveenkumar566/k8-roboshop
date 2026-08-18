@@ -99,8 +99,8 @@ spec:
         component: frontend
     spec:
       volumes:
-      - name: nginx.config
-        ConfigMap: 
+       - name: nginx.config
+         ConfigMap:
           name: frontend
       containers:
       - name: frontend
