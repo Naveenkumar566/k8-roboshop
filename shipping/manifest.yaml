@@ -42,12 +42,12 @@ spec:
         image: naveen678/shipping:1.0.0
         imagePullPolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
-          requests:
-            memory: "256mi"
-            cpu: "200m"
-          limits:
-            memory: "256mi"
-            cpu: "200m"
+            requests:
+              cpu: "200m"
+              memory: "256mi"
+            limits:
+              cpu: "200m"
+              memory: "256mi"
         readinessProbe:
             #httpGet:
             ##port: 8080
