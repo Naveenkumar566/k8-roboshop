@@ -103,7 +103,7 @@ spec:
         Configmap: 
           name: frontend
       containers:
-      - name: nginx
+      - name: frontend
         image: naveen678/frontend:1.0.0
         imagepullpolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
