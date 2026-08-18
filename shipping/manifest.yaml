@@ -38,16 +38,16 @@ spec:
         component: shipping
     spec:
       containers:
-      - name: nginx
+      - name: shipping
         image: naveen678/shipping:1.0.0
         imagePullPolicy: Always                         # safe to pull everytime, there might be images with same version rebuilt and pushed 
         resources:
             requests:
-              cpu: "200m"
+              cpu: "100m"
               memory: "256Mi"
             limits:
               cpu: "200m"
-              memory: "256Mi"
+              memory: "400Mi"
         readinessProbe:
             #httpGet:
             ##port: 8080
