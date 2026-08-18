@@ -100,7 +100,7 @@ spec:
     spec:
       volumes:
       - name: nginx.config
-        Configmap: 
+        ConfigMap: 
           name: frontend
       containers:
       - name: frontend
@@ -133,7 +133,7 @@ spec:
             subPath: nginx.conf
             readOnly: true                             #every 10sec healhth check should run 
 ---
-apiversion: v1                                            #clusterip
+apiVersion: v1                                            #clusterip
 kind: Service
 metadata: 
   name: frontend
